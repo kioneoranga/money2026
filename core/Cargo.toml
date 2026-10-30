@@ -1,0 +1,10 @@
+[package]
+name = "money_core"
+version = "0.1.0"
+edition = "2021"
+description = "Coeur metier Money 2026 : base de donnees locale, comptes, transactions, regles, previsions."
+
+[dependencies]
+rusqlite = { version = "0.31", features = ["bundled"] }
+
+[dev-dependencies]

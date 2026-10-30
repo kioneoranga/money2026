@@ -1,0 +1,25 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<title>Money 2026</title>
+<style>body{font:15px system-ui;background:#F5F6F8;color:#17212B;padding:24px;max-width:560px;margin:auto}
+.sf{background:#fff;border:1px solid #DDE2E8;border-radius:12px;padding:16px 18px;margin-bottom:14px}
+button{border:1px solid #DDE2E8;background:#0F6E66;color:#fff;border-radius:8px;padding:8px 14px;cursor:pointer}
+input{border:1px solid #DDE2E8;border-radius:8px;padding:8px;margin-right:6px}</style></head>
+<body>
+<h2>Money 2026 — prototype Tauri</h2>
+<p>Preuve de bout en bout : base SQLite reelle, via le coeur Rust teste (<code>money_core</code>), pilotee depuis cette page.</p>
+<div class="sf"><input id="n" placeholder="Nom du compte" value="Compte courant"><button onclick="addAcc()">Ajouter un compte</button></div>
+<div class="sf" id="list">Chargement…</div>
+<script>
+const {invoke} = window.__TAURI__.tauri;
+async function refresh(){
+  const accs = await invoke('list_accounts_with_balance');
+  document.getElementById('list').innerHTML = accs.length
+    ? accs.map(a=>`<div>${a.name} — ${(a.balance_cents/100).toLocaleString('fr-FR',{style:'currency',currency:'EUR'})}</div>`).join('')
+    : 'Aucun compte pour le moment.';
+}
+async function addAcc(){
+  await invoke('add_account',{name:document.getElementById('n').value,kind:'checking',openingCents:0});
+  refresh();
+}
+refresh();
+</script></body></html>

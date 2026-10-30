@@ -1,0 +1,21 @@
+{
+  "build": {
+    "beforeDevCommand": "",
+    "beforeBuildCommand": "",
+    "devPath": "../src",
+    "distDir": "../src"
+  },
+  "package": { "productName": "Money 2026", "version": "0.1.0" },
+  "tauri": {
+    "allowlist": { "all": false, "shell": { "open": false }, "dialog": { "open": true, "save": true } },
+    "bundle": {
+      "active": true,
+      "targets": ["nsis"],
+      "identifier": "com.eric.money2026",
+      "icon": ["icons/icon.ico"]
+    },
+    "windows": [
+      { "title": "Money 2026", "width": 1280, "height": 820, "minWidth": 420, "minHeight": 560 }
+    ]
+  }
+}

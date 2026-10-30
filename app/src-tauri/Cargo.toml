@@ -1,0 +1,17 @@
+[package]
+name = "money2026"
+version = "0.1.0"
+edition = "2021"
+description = "Money 2026 - gestion de comptes personnels, coquille desktop Windows (Tauri)."
+
+[build-dependencies]
+tauri-build = { version = "1", features = [] }
+
+[dependencies]
+tauri = { version = "1", features = ["shell-open", "dialog-open", "dialog-save", "fs-read-file", "fs-write-file"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+money_core = { path = "../../core" }
+
+[features]
+custom-protocol = ["tauri/custom-protocol"]
