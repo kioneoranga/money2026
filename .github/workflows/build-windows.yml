@@ -1,0 +1,26 @@
+name: Construire l'exécutable Windows
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Installer Tauri CLI
+        run: npm install -g @tauri-apps/cli@1
+      - name: Construire l'application (.exe + installeur)
+        working-directory: app
+        run: tauri build
+      - name: Publier l'exécutable
+        uses: actions/upload-artifact@v4
+        with:
+          name: Money2026-windows
+          path: |
+            app/src-tauri/target/release/*.exe
+            app/src-tauri/target/release/bundle/nsis/*.exe
