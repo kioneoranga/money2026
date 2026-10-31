@@ -12,14 +12,26 @@ input{border:1px solid #DDE2E8;border-radius:8px;padding:8px;margin-right:6px}</
 <script>
 const {invoke} = window.__TAURI__.tauri;
 async function refresh(){
-  const accs = await invoke('list_accounts_with_balance');
-  document.getElementById('list').innerHTML = accs.length
-    ? accs.map(a=>`<div>${a.name} — ${(a.balance_cents/100).toLocaleString('fr-FR',{style:'currency',currency:'EUR'})}</div>`).join('')
-    : 'Aucun compte pour le moment.';
+  try{
+    const accs = await invoke('list_accounts_with_balance');
+    document.getElementById('list').innerHTML = accs.length
+      ? accs.map(a=>`<div>${a.name} — ${(a.balance_cents/100).toLocaleString('fr-FR',{style:'currency',currency:'EUR'})}</div>`).join('')
+      : 'Aucun compte pour le moment.';
+  }catch(e){
+    document.getElementById('list').innerHTML = '<b style="color:#B3261E">Erreur : '+String(e)+'</b>';
+  }
 }
 async function addAcc(){
-  await invoke('add_account',{name:document.getElementById('n').value,kind:'checking',openingCents:0});
+  try{
+    await invoke('add_account',{name:document.getElementById('n').value,kind:'checking',openingCents:0});
+    refresh();
+  }catch(e){
+    document.getElementById('list').innerHTML = '<b style="color:#B3261E">Erreur : '+String(e)+'</b>';
+  }
+}
+if(!window.__TAURI__){
+  document.getElementById('list').innerHTML = '<b style="color:#B3261E">window.__TAURI__ est absent — withGlobalTauri doit être activé dans tauri.conf.json.</b>';
+}else{
   refresh();
 }
-refresh();
 </script></body></html>
